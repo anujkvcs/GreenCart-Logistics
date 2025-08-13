@@ -259,16 +259,7 @@ export default function Management() {
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold text-gray-800">Management</h1>
-      <div className="text-sm text-gray-600">
-        Backend: <span className={`font-semibold ${
-          backendStatus === 'connected' ? 'text-green-600' : 
-          backendStatus === 'disconnected' ? 'text-red-600' : 'text-yellow-600'
-        }`}>
-          {backendStatus === 'connected' ? 'Connected' : 
-           backendStatus === 'disconnected' ? 'Disconnected' : 'Checking...'}
-        </span> | 
-        Drivers: {drivers.length} | Routes: {routes.length} | Orders: {orders.length}
-      </div>
+
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
           <strong>Error:</strong> {error}
