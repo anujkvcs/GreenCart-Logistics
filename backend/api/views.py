@@ -24,23 +24,42 @@ class DriverViewSet(viewsets.ModelViewSet):
 
 @api_view(['POST'])
 def register(request):
-    from django.contrib.auth.models import User
-    username = request.data.get('username')
-    password = request.data.get('password')
-    if User.objects.filter(username=username).exists():
-        return Response({'error': 'User exists'}, status=400)
-    user = User.objects.create_user(username=username, password=password)
-    return Response({'message': 'User created'})
+    try:
+        from django.contrib.auth.models import User
+        username = request.data.get('username')
+        password = request.data.get('password')
+        
+        if not username or not password:
+            return Response({'error': 'Username and password required'}, status=400)
+        
+        if User.objects.filter(username=username).exists():
+            return Response({'error': 'User already exists'}, status=400)
+        
+        user = User.objects.create_user(username=username, password=password)
+        return Response({'message': 'User created successfully'})
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
 
 @api_view(['POST'])
 def login(request):
-    username = request.data.get('username')
-    password = request.data.get('password')
-    user = authenticate(username=username, password=password)
-    if user:
-        refresh = RefreshToken.for_user(user)
-        return Response({'access': str(refresh.access_token), 'refresh': str(refresh)})
-    return Response({'error': 'Invalid credentials'}, status=401)
+    try:
+        username = request.data.get('username')
+        password = request.data.get('password')
+        
+        if not username or not password:
+            return Response({'error': 'Username and password required'}, status=400)
+        
+        user = authenticate(username=username, password=password)
+        if user:
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'access': str(refresh.access_token), 
+                'refresh': str(refresh),
+                'message': 'Login successful'
+            })
+        return Response({'error': 'Invalid username or password'}, status=401)
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
