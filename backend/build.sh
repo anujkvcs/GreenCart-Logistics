@@ -5,3 +5,7 @@ apt-get install -y default-libmysqlclient-dev build-essential pkg-config
 
 # Install Python dependencies
 pip install -r requirements.txt
+
+# Django setup
+python manage.py collectstatic --no-input
+python manage.py migrate
