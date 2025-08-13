@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api';
+const API_BASE = import.meta.env.PROD 
+  ? 'https://greencart-logistics-ngsg.onrender.com/api'
+  : import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api';
 console.log('API_BASE URL:', API_BASE);
 
 // Create axios instance with default config
