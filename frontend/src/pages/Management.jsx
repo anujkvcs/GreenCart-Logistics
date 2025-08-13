@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-
-const API_BASE = 'http://127.0.0.1:8000/api'
+import { fetchDrivers, fetchRoutes, fetchOrders, createDriver, updateDriver, deleteDriver, createRoute, updateRoute, deleteRoute, createOrder, updateOrder, deleteOrder } from '../services/api'
 
 export default function Management() {
   const [activeTab, setActiveTab] = useState('drivers')
@@ -24,37 +22,20 @@ export default function Management() {
       // Test backend connectivity
       console.log('Testing backend connection to:', API_BASE)
       
-      try {
-        const testRes = await axios.get('http://127.0.0.1:8000/')
-        console.log('Backend test response:', testRes.data)
-        setBackendStatus('connected')
-      } catch (testError) {
-        console.error('Backend connection failed:', testError)
-        setBackendStatus('disconnected')
-        setError('Cannot connect to backend server. Make sure Django is running on http://127.0.0.1:8000')
-        setLoading(false)
-        return
-      }
+      const driversData = await fetchDrivers()
+      const routesData = await fetchRoutes()
+      const ordersData = await fetchOrders()
       
-      console.log('Fetching data...')
-      
-      const driversRes = await axios.get(`${API_BASE}/drivers/`)
-      console.log('Drivers API response:', driversRes.data)
-      
-      const routesRes = await axios.get(`${API_BASE}/routes/`)
-      console.log('Routes API response:', routesRes.data)
-      
-      const ordersRes = await axios.get(`${API_BASE}/orders/`)
-      console.log('Orders API response:', ordersRes.data)
+      setBackendStatus('connected')
       
       console.log('Setting state with:')
       console.log('- Drivers array length:', Array.isArray(driversRes.data) ? driversRes.data.length : 'Not an array')
       console.log('- Routes array length:', Array.isArray(routesRes.data) ? routesRes.data.length : 'Not an array')
       console.log('- Orders array length:', Array.isArray(ordersRes.data) ? ordersRes.data.length : 'Not an array')
       
-      setDrivers(Array.isArray(driversRes.data) ? driversRes.data : [])
-      setRoutes(Array.isArray(routesRes.data) ? routesRes.data : [])
-      setOrders(Array.isArray(ordersRes.data) ? ordersRes.data : [])
+      setDrivers(Array.isArray(driversData) ? driversData : [])
+      setRoutes(Array.isArray(routesData) ? routesData : [])
+      setOrders(Array.isArray(ordersData) ? ordersData : [])
       setBackendStatus('connected')
     } catch (error) {
       console.error('Error fetching data:', error.response?.data || error.message)
@@ -73,7 +54,9 @@ export default function Management() {
     if (!confirm('Are you sure you want to delete this item?')) return
     
     try {
-      await axios.delete(`${API_BASE}/${type}/${id}/`)
+      if (type === 'drivers') await deleteDriver(id)
+      else if (type === 'routes') await deleteRoute(id)
+      else if (type === 'orders') await deleteOrder(id)
       fetchData()
     } catch (error) {
       console.error('Error deleting:', error)
@@ -82,10 +65,12 @@ export default function Management() {
 
   const handleSave = async (type, data) => {
     try {
-      if (data.id) {
-        await axios.put(`${API_BASE}/${type}/${data.id}/`, data)
-      } else {
-        await axios.post(`${API_BASE}/${type}/`, data)
+      if (type === 'drivers') {
+        data.id ? await updateDriver(data.id, data) : await createDriver(data)
+      } else if (type === 'routes') {
+        data.route_id ? await updateRoute(data.route_id, data) : await createRoute(data)
+      } else if (type === 'orders') {
+        data.order_id ? await updateOrder(data.order_id, data) : await createOrder(data)
       }
       
       setEditingItem(null)
