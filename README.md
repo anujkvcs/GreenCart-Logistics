@@ -1,5 +1,11 @@
 # GreenCart Logistics - Delivery Simulation & KPI Dashboard
 
+## 🚀 Live Deployment
+- **Frontend**: https://green-cart-logistics-4z6o.vercel.app/
+- **Backend API**: https://greencart-logistics-ngsg.onrender.com/
+- **Demo Video**: https://www.youtube.com/watch?v=8nbVk6tX2P8
+- **GitHub Repository**: https://github.com/anujkvcs/GreenCart-Logistics
+
 ## Project Overview & Purpose
 GreenCart Logistics is an eco-friendly delivery company simulation tool built for Purple Merit Technologies assessment. This internal management tool helps delivery managers experiment with staffing levels, delivery schedules, and route allocations to optimize profits and operational efficiency. The application provides real-time KPI calculations based on custom proprietary business rules and enables data-driven decision making for delivery operations.
 
@@ -58,10 +64,10 @@ npm run dev
 - **Admin Panel**: http://localhost:8000/admin
 
 **Live Deployment URLs:**
-- **Frontend**: [To be deployed on Vercel/Netlify]
-- **Backend API**: [To be deployed on Railway/Render]
-- **Database**: Neon PostgreSQL (Cloud-hosted)
-- **API Documentation**: Available at `/api/` endpoint
+- **Frontend**: https://green-cart-logistics-4z6o.vercel.app/
+- **Backend API**: https://greencart-logistics-ngsg.onrender.com/api
+- **Database**: SQLite with CSV data pre-loaded
+- **Demo Video**: https://www.youtube.com/watch?v=8nbVk6tX2P8
 
 ## Environment Variables
 Required environment variables (create `.env` file in backend directory):
@@ -122,12 +128,20 @@ Run specific test file:
 py -m unittest tests.py
 ```
 
-## Getting Started
-1. **Register**: Create a new account using the registration form
-2. **Login**: Access the dashboard with your credentials
-3. **Explore**: Navigate between Dashboard, Simulation, and Management sections
-4. **Simulate**: Run delivery scenarios with different parameters
-5. **Manage**: Add/edit drivers, routes, and orders as needed
+## 🎯 Getting Started (Live Demo)
+1. **Visit**: https://green-cart-logistics-4z6o.vercel.app/
+2. **Register**: Create a new account using the registration form
+3. **Login**: Access the dashboard with your credentials
+4. **Explore**: Navigate between Dashboard, Simulation, and Management sections
+5. **Simulate**: Run delivery scenarios with different parameters
+6. **Manage**: Add/edit drivers, routes, and orders as needed
+7. **Watch Demo**: https://www.youtube.com/watch?v=8nbVk6tX2P8
+
+## 📊 Sample Data
+The application comes pre-loaded with:
+- **10 Drivers** with varying shift hours and past week data
+- **10 Routes** with different distances and traffic levels
+- **50 Orders** with various values and delivery requirements
 
 ## Authentication & Security
 - JWT-based authentication with automatic token refresh
