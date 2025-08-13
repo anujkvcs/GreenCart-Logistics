@@ -20,7 +20,7 @@ export default function Management() {
     setError('')
     try {
       // Test backend connectivity
-      console.log('Testing backend connection to:', API_BASE)
+      console.log('Testing backend connection...')
       
       const driversData = await fetchDrivers()
       const routesData = await fetchRoutes()
@@ -43,7 +43,7 @@ export default function Management() {
       if (error.response?.status === 500) {
         setError('Server Error (500): Database connection issue. Check if MySQL is running.')
       } else {
-        setError(`API Error: ${error.message}. Check if backend is running on http://127.0.0.1:8000`)
+        setError(`API Error: ${error.message}. Backend connection failed.`)
       }
     } finally {
       setLoading(false)
