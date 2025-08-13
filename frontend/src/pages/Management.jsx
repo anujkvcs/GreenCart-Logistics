@@ -29,9 +29,9 @@ export default function Management() {
       setBackendStatus('connected')
       
       console.log('Setting state with:')
-      console.log('- Drivers array length:', Array.isArray(driversRes.data) ? driversRes.data.length : 'Not an array')
-      console.log('- Routes array length:', Array.isArray(routesRes.data) ? routesRes.data.length : 'Not an array')
-      console.log('- Orders array length:', Array.isArray(ordersRes.data) ? ordersRes.data.length : 'Not an array')
+      console.log('- Drivers array length:', Array.isArray(driversData) ? driversData.length : 'Not an array')
+      console.log('- Routes array length:', Array.isArray(routesData) ? routesData.length : 'Not an array')
+      console.log('- Orders array length:', Array.isArray(ordersData) ? ordersData.length : 'Not an array')
       
       setDrivers(Array.isArray(driversData) ? driversData : [])
       setRoutes(Array.isArray(routesData) ? routesData : [])
