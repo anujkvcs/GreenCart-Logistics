@@ -11,13 +11,13 @@ GreenCart Logistics is an eco-friendly delivery company simulation tool built fo
 
 ## Tech Stack Used
 - **Backend**: Python Django + Django REST Framework
-- **Database**: PostgreSQL (Neon Cloud-Hosted)
+- **Database**: MySQL
 - **Frontend**: React 18 with Hooks + Vite
 - **Charts**: Recharts (2 interactive charts)
 - **Authentication**: JWT (djangorestframework-simplejwt)
 - **Styling**: Tailwind CSS (Responsive Design)
 - **Testing**: Django Unit Tests (5+ test cases)
-- **Deployment**: Backend on Railway/Render, Frontend on Vercel/Netlify
+- **Deployment**: Backend on Render, Frontend on Vercel
 - **Environment**: .env configuration with proper .gitignore
 
 ## ✅ Project Status: PRODUCTION READY
@@ -66,7 +66,7 @@ npm run dev
 **Live Deployment URLs:**
 - **Frontend**: https://green-cart-logistics-4z6o.vercel.app/
 - **Backend API**: https://greencart-logistics-ngsg.onrender.com/api
-- **Database**: SQLite with CSV data pre-loaded
+- **Database**: MySQL with CSV data pre-loaded
 - **Demo Video**: https://www.youtube.com/watch?v=8nbVk6tX2P8
 
 ## Environment Variables
@@ -76,13 +76,22 @@ Required environment variables (create `.env` file in backend directory):
 ```
 DJANGO_SECRET_KEY=your-secret-key-here
 DEBUG=True
+DB_NAME=reservations
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=admindjango
+DB_PASSWORD=employee@123!
 ```
 
 **Production:**
 ```
 DJANGO_SECRET_KEY=your-production-secret-key
 DEBUG=False
-DATABASE_URL=postgresql://username:password@host:port/database
+DB_NAME=your-mysql-database
+DB_HOST=your-mysql-host
+DB_PORT=3306
+DB_USER=your-mysql-user
+DB_PASSWORD=your-mysql-password
 ```
 
 **Note**: Actual values are excluded from repository via .gitignore for security.

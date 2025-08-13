@@ -25,18 +25,48 @@ class DriverViewSet(viewsets.ModelViewSet):
 @api_view(['POST'])
 def register(request):
     try:
-        from django.contrib.auth.models import User
+        from accounts.models import User
         username = request.data.get('username')
+        email = request.data.get('email')
         password = request.data.get('password')
+        full_name = request.data.get('full_name', '')
         
-        if not username or not password:
-            return Response({'error': 'Username and password required'}, status=400)
+        if not username or not password or not email:
+            return Response({'error': 'Username, email and password required'}, status=400)
         
         if User.objects.filter(username=username).exists():
-            return Response({'error': 'User already exists'}, status=400)
+            return Response({'error': 'Username already exists'}, status=400)
         
-        user = User.objects.create_user(username=username, password=password)
-        return Response({'message': 'User created successfully'})
+        if User.objects.filter(email=email).exists():
+            return Response({'error': 'Email already exists'}, status=400)
+        
+        user = User.objects.create_user(
+            username=username, 
+            email=email, 
+            password=password,
+            full_name=full_name or username,
+            phone=request.data.get('phone', ''),
+            role=request.data.get('role', 'customer'),
+            company=request.data.get('company', ''),
+            address=request.data.get('address', ''),
+            city=request.data.get('city', ''),
+            country=request.data.get('country', ''),
+            postal_code=request.data.get('postal_code', '')
+        )
+        
+        refresh = RefreshToken.for_user(user)
+        return Response({
+            'message': 'User created successfully',
+            'access': str(refresh.access_token),
+            'refresh': str(refresh),
+            'user': {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'full_name': user.full_name,
+                'role': user.role
+            }
+        })
     except Exception as e:
         return Response({'error': str(e)}, status=500)
 
@@ -44,20 +74,50 @@ def register(request):
 def login(request):
     try:
         username = request.data.get('username')
+        email = request.data.get('email')
         password = request.data.get('password')
         
-        if not username or not password:
-            return Response({'error': 'Username and password required'}, status=400)
+        if not password:
+            return Response({'error': 'Password required'}, status=400)
         
-        user = authenticate(username=username, password=password)
+        if not username and not email:
+            return Response({'error': 'Username or email required'}, status=400)
+        
+        # Try authentication with username or email
+        user = None
+        if email:
+            try:
+                from accounts.models import User
+                user_obj = User.objects.get(email=email)
+                if user_obj.check_password(password):
+                    user = user_obj
+            except User.DoesNotExist:
+                pass
+        
+        if not user and username:
+            try:
+                from accounts.models import User
+                user_obj = User.objects.get(username=username)
+                if user_obj.check_password(password):
+                    user = user_obj
+            except User.DoesNotExist:
+                pass
+        
         if user:
             refresh = RefreshToken.for_user(user)
             return Response({
                 'access': str(refresh.access_token), 
                 'refresh': str(refresh),
+                'user': {
+                    'id': user.id,
+                    'username': user.username,
+                    'email': user.email,
+                    'full_name': getattr(user, 'full_name', user.username),
+                    'role': getattr(user, 'role', 'customer')
+                },
                 'message': 'Login successful'
             })
-        return Response({'error': 'Invalid username or password'}, status=401)
+        return Response({'error': 'Invalid credentials'}, status=401)
     except Exception as e:
         return Response({'error': str(e)}, status=500)
 
