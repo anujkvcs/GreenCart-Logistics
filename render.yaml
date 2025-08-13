@@ -2,10 +2,9 @@ services:
   - type: web
     name: greencart-backend
     env: python
-    buildCommand: |
-      apt-get update && apt-get install -y default-libmysqlclient-dev build-essential pkg-config
-      cd backend && pip install -r requirements.txt
-    startCommand: cd backend && python manage.py migrate && python manage.py load_csvs && python manage.py runserver 0.0.0.0:$PORT
+    rootDir: backend
+    buildCommand: ./build.sh
+    startCommand: python manage.py migrate && python manage.py load_csvs && python manage.py runserver 0.0.0.0:$PORT
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
